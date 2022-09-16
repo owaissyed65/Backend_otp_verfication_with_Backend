@@ -15,14 +15,20 @@ const userSchema = new mongoose.Schema({
         require: true
     },
     country: {
-        type:String,
-        require:true,
-        default:'Pakistan',
+        type: String,
+        require: true,
+        default: 'Pakistan',
     },
     date: {
         type: Date,
         default: Date.now
     },
+    otp: {
+        type: String,
+        default: Math.floor(Math.random() * 10000 ),
+        index: true,
+    }
+
 
 })
 const User = mongoose.model('user', userSchema)

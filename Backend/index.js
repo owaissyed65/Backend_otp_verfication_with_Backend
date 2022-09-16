@@ -11,6 +11,7 @@ app.get('/', (req, res) => {
 })
 app.use('/auth', require('./router/auth'))
 
+
 app.listen(port, () => {
     console.log(`http://localhost:${port}`)
 })

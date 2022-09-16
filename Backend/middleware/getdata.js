@@ -8,6 +8,7 @@ const getdata = async (req, res, next) => {
         }
         const id = await jwt.verify(token, process.env.token)
         req.id = id;
+        // console.log(req.id)
         next()
     } catch (error) {
         console.log(error)
