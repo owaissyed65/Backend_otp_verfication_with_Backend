@@ -5,8 +5,8 @@ const req = async (req, res, next) => {
     }
     req.email = email
     req.password = password
-    
-    
+
+
     next()
 }
 module.exports = req

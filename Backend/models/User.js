@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-
+const otpGenerator = require('otp-generator')
+const nodemailer = require('nodemailer')
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -25,7 +26,7 @@ const userSchema = new mongoose.Schema({
     },
     otp: {
         type: String,
-        default: Math.floor(Math.random() * 10000 ),
+        default: otpGenerator.generate(5, { digits: true, upperCaseAlphabets: false, specialChars: false }),
         index: true,
     }
 
