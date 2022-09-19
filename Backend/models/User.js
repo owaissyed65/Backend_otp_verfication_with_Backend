@@ -26,8 +26,7 @@ const userSchema = new mongoose.Schema({
     },
     otp: {
         type: String,
-        default: otpGenerator.generate(5, { digits: true, upperCaseAlphabets: false, specialChars: false }),
-        index: true,
+        require:true
     }
 
 

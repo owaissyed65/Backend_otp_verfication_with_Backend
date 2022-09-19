@@ -25,7 +25,14 @@ router.post('/signup', request, async (req, res) => {
         //hash password
         const salt = await bcrypt.genSalt(12);
         const hash = await bcrypt.hash(req.password, salt);
-        const user = await User.create({ name: req.body.name, email: req.email, password: hash, country: req.body.country })
+        const user = await User.create
+        ({
+            name: req.body.name,
+            email: req.email,
+            password: hash,
+            country: req.body.country,
+            otp: otpGenerator.generate(5, { digits: true, upperCaseAlphabets: false, specialChars: false }),
+        })
         await user.save()
         const userVerify = await User.findOne({ email: req.email })
         const Authorization = await jwt.sign({ _id: userVerify._id }, process.env.token)
@@ -74,7 +81,7 @@ router.post('/login', request, async (req, res) => {
         }
     } catch (error) {
         console.log(error)
-        return res.status(500).json({error:error})
+        return res.status(500).json({ error: error })
     }
 })
 // router 4 to forgotpassword
@@ -92,7 +99,7 @@ router.put('/login/forgetpassword', async (req, res) => {
         res.status(201).json({ message: 'Please Enter Your New Otp Code' });
     } catch (error) {
         console.log(error)
-        return res.status(500).json({error:error})
+        return res.status(500).json({ error: error })
     }
 })
 // router 5 forgetpassword otp
@@ -122,11 +129,10 @@ router.put('/changepassword', async (req, res) => {
         const hash = await bcrypt.hash(newPassword, salt);
         const password = { password: hash }
         const changeOtp = await User.findByIdAndUpdate(findUSer._id, { $set: password }, { new: true })
-        await db.collection('users').updateOne({ $unset: { otp: changeOtp.otp } })
         res.status(201).json({ message: 'Successfully change A Password', changeOtp: changeOtp.email })
     } catch (error) {
         console.log(error)
-        return res.status(500).json({error:error})
+        return res.status(500).json({ error: error })
     }
 })
 
@@ -137,7 +143,7 @@ router.get('/getdata', getdata, async (req, res) => {
         const getdata = await User.findOne({ _id: req.id })
         res.status(200).json({ getdata })
     } catch (error) {
-        return res.status(500).json({error:error})
+        return res.status(500).json({ error: error })
     }
 })
 module.exports = router
