@@ -1,9 +1,19 @@
 import React from 'react'
+import { useEffect } from 'react';
 import { useContext } from 'react';
-import context from '../context/context';
+import { Link, useNavigate } from 'react-router-dom';
+import context from '../../context/context';
 const Signup = () => {
     const Context = useContext(context);
     const { handleOnChange, handleOnSubmit, credentials, changeVisibility, changeVis } = Context
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            window.alert('Please Logout to Return in signup ')
+            navigate('/')
+        }
+        // eslint-disable-next-line
+    }, []);
     return (
         <div className='container d-flex align-items-center justify-content-center' style={{ height: '500px', marginTop: "30px" }}>
             <div className="shadow p-3 mb-5 bg-body rounded p-3 bg-info bg-opacity-10 border border-info border-start-0 rounded-end  " >
@@ -31,6 +41,7 @@ const Signup = () => {
                     </form>
 
                 </div>
+                <Link to='/login'>Already Have An Account?</Link>
             </div>
         </div>
     )

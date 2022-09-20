@@ -20,14 +20,14 @@ const Home = () => {
     }).then(data => {
       const { getdata } = data
       setInfo({ name: getdata.name, email: getdata.email, country: getdata.country })
-
     }).catch((err) => {
       console.log(err)
     })
   }, []);
   useEffect(() => {
-    if (!localStorage.getItem('token') ) {
+    if (!localStorage.getItem('token')) {
       navigate('/login')
+      window.alert('Please Create Account or Signin')
     }
     // eslint-disable-next-line
   }, []);
@@ -36,8 +36,8 @@ const Home = () => {
       <div className='Homepage'>
         <p className='wel'>Welcome {info.name}</p>
         <h1 className='home'>We are the Mern Developer</h1>
-        <span className='home' style={{ fontSize: '1.5rem' }}>Your Country: <h2 className='d-inline'>{info.country} </h2></span>
-        <span className='home' style={{ fontSize: '1.5rem' }}>Your Country: <h2 className='d-inline mx-2'>{info.email} </h2></span>
+        <span className='home' style={{ fontSize: '2rem' }}>Your Country: <h2 className='d-inline'>{info.country} </h2></span>
+        <span className='home' style={{ fontSize: '2rem' }}>Your email: <h2 className='d-inline mx-2'>{info.email} </h2></span>
       </div>
     </div>
   )

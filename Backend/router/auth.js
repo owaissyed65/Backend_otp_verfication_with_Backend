@@ -26,13 +26,13 @@ router.post('/signup', request, async (req, res) => {
         const salt = await bcrypt.genSalt(12);
         const hash = await bcrypt.hash(req.password, salt);
         const user = await User.create
-        ({
-            name: req.body.name,
-            email: req.email,
-            password: hash,
-            country: req.body.country,
-            otp: otpGenerator.generate(5, { digits: true, upperCaseAlphabets: false, specialChars: false }),
-        })
+            ({
+                name: req.body.name,
+                email: req.email,
+                password: hash,
+                country: req.body.country,
+                otp: otpGenerator.generate(5, { digits: true, upperCaseAlphabets: false, specialChars: false }),
+            })
         await user.save()
         const userVerify = await User.findOne({ email: req.email })
         const Authorization = await jwt.sign({ _id: userVerify._id }, process.env.token)
@@ -52,8 +52,7 @@ router.post('/verify', getdata, async (req, res) => {
         else {
             const userVerify = await User.findOne({ _id: req.id, otp: req.body.otp, }).select('-otp').select('-password')
             if (!userVerify) {
-                const dltUser = await User.deleteOne({ _id: req.id })
-                return res.json({ dltUser })
+                return res.json({ message: 'Please Enter Correct Otp To Verify' })
             }
             else {
                 return res.status(200).json({ userVerify })
@@ -91,7 +90,7 @@ router.put('/login/forgetpassword', async (req, res) => {
         checkEmail = email
         const findUSer = await User.findOne({ email: email })
         if (!findUSer) {
-            return res.send({ message: "User Not Exist " })
+            return res.status(400).json({ message: "User Not Exist " })
         }
         let otp = { otp: otpGenerator.generate(5, { digits: true, upperCaseAlphabets: false, specialChars: false }) }
         const changeOtp = await User.findByIdAndUpdate(findUSer._id, { $set: otp }, { new: true })
@@ -110,7 +109,7 @@ router.post('/password/otp', async (req, res) => {
         }
         const userVerify = await User.findOne({ otp: req.body.otp }).select('-otp').select('-password')
         if (!userVerify) {
-            return res.status(401).send({ message: "Please Enter Write Otp code that we are provided" })
+            return res.status(401).send({ message: "Please Enter Correct Otp code that we are provided" })
         }
         else {
             return res.status(200).json({ message: 'You Can Change Password Now' })
